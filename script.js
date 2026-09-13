@@ -1,8 +1,31 @@
 (function () {
   "use strict";
 
+  // ---- Преводи (i18n) ----
+  var I18N = {
+    en: {
+      language: "Language", currency: "Currency",
+      campaignStart: "Campaign Start", campaignEnd: "Campaign End",
+      totalRevenue: "Total Revenue", avgOrder: "Avg. Order Value",
+      months: "Months", prospects: "Prospects", leads: "Leads", customers: "Customers",
+      leadRate: "Lead Response Rate", prospectRate: "Prospect Response Rate",
+      people: "people", month: "Month", noData: "Enter valid data to see the forecast.",
+      usd: "$ US Dollar", eur: "€ Euro", bgn: "лв. Lev", gbp: "£ Pound"
+    },
+    bg: {
+      language: "Език", currency: "Валута",
+      campaignStart: "Начало на кампанията", campaignEnd: "Край на кампанията",
+      totalRevenue: "Общ оборот", avgOrder: "Средна стойност на поръчката",
+      months: "Месеци", prospects: "Контакти", leads: "Потенц. клиенти", customers: "Клиенти",
+      leadRate: "Отговори от потенц. клиенти", prospectRate: "Отговори от контакти",
+      people: "души", month: "Месец", noData: "Въведете валидни данни, за да видите прогнозата.",
+      usd: "$ Долар", eur: "€ Евро", bgn: "лв. Лев", gbp: "£ Паунд"
+    }
+  };
+
   var $ = function (id) { return document.getElementById(id); };
   var els = {
+    language: $("language"), currency: $("currency"),
     startDate: $("startDate"), endDate: $("endDate"),
     revenue: $("revenue"), avgOrder: $("avgOrder"),
     leadRate: $("leadRate"), prospectRate: $("prospectRate"),
@@ -14,7 +37,9 @@
     tooltip: $("tooltip")
   };
 
-  var nf = function () { return new Intl.NumberFormat("en-US"); };
+  var lang = "en";
+  var t = function (key) { return (I18N[lang] && I18N[lang][key]) || key; };
+  var nf = function () { return new Intl.NumberFormat(lang === "bg" ? "bg-BG" : "en-US"); };
 
   // ---- Брой месеци между двете дати (мин. 1) ----
   function monthsBetween(start, end) {
@@ -92,7 +117,7 @@
     for (var i = 0; i <= 5; i++) {
       var val = Math.round((axisMax / 5) * i);
       var span = document.createElement("span");
-      span.textContent = fmt.format(val) + " people";
+      span.textContent = fmt.format(val) + " " + t("people");
       els.chartXAxis.appendChild(span);
     }
   }
@@ -110,15 +135,30 @@
 
   function showTip(e, m, p, l, c) {
     els.tooltip.innerHTML =
-      "<strong>Month #" + m + "</strong><br>" +
-      "Prospects: " + p + "<br>" +
-      "Leads: " + l + "<br>" +
-      "Customers: " + c;
+      "<strong>" + t("month") + " #" + m + "</strong><br>" +
+      t("prospects") + ": " + p + "<br>" +
+      t("leads") + ": " + l + "<br>" +
+      t("customers") + ": " + c;
     els.tooltip.hidden = false;
     els.tooltip.style.left = (e.clientX + 14) + "px";
     els.tooltip.style.top = (e.clientY + 14) + "px";
   }
   function hideTip() { els.tooltip.hidden = true; }
+
+  // ---- Смяна на валута / език ----
+  function applyCurrency() {
+    var sym = els.currency.value;
+    var nodes = document.querySelectorAll("[data-currency]");
+    for (var i = 0; i < nodes.length; i++) { nodes[i].textContent = sym; }
+  }
+  function applyLanguage() {
+    lang = els.language.value;
+    document.documentElement.lang = lang;
+    var nodes = document.querySelectorAll("[data-i18n]");
+    for (var i = 0; i < nodes.length; i++) {
+      nodes[i].textContent = t(nodes[i].getAttribute("data-i18n"));
+    }
+  }
 
   // ---- Главна функция за обновяване ----
   function update() {
@@ -141,7 +181,11 @@
   ["revenue", "avgOrder", "leadRate", "prospectRate", "startDate", "endDate"].forEach(function (id) {
     els[id].addEventListener("input", update);
   });
+  els.currency.addEventListener("change", function () { applyCurrency(); });
+  els.language.addEventListener("change", function () { applyLanguage(); update(); });
 
   // ---- Старт ----
+  applyCurrency();
+  applyLanguage();
   update();
 })();
