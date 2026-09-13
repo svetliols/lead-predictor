@@ -1,0 +1,185 @@
+:root {
+  --bg: #0f1623;
+  --panel: #1a2436;
+  --panel-2: #202c42;
+  --border: #2a3752;
+  --text: #e6ecf5;
+  --muted: #8b98ad;
+  --accent: #5b8cff;
+
+  /* Цветове на графиката: prospects (най-дълъг, тъмен) -> leads -> customers (най-къс, светъл) */
+  --bar-prospects: #4a5a74;
+  --bar-leads: #7d8ca6;
+  --bar-customers: #c3ccda;
+
+  --radius: 14px;
+  --radius-sm: 10px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  padding: 22px;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.app { max-width: 1240px; margin: 0 auto; }
+
+/* --- Лого / заглавие --- */
+.topbar { margin-bottom: 20px; }
+.brand { display: flex; align-items: center; gap: 12px; color: var(--muted); }
+.brand__logo { color: var(--accent); }
+.brand__name { font-size: 1.7rem; font-weight: 800; color: var(--text); letter-spacing: -.5px; }
+.brand__muted { color: var(--muted); }
+
+/* --- Оформление (grid) --- */
+.layout {
+  display: grid;
+  grid-template-columns: 250px 1fr 320px;
+  grid-template-areas:
+    "inputs chart stats"
+    "inputs sliders sliders";
+  gap: 16px;
+  align-items: start;
+}
+.inputs { grid-area: inputs; }
+.chart-card { grid-area: chart; }
+.stats { grid-area: stats; display: grid; gap: 16px; align-content: start; }
+.sliders { grid-area: sliders; }
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+
+/* --- Полета за въвеждане --- */
+.field { display: grid; gap: 7px; margin-bottom: 16px; }
+.field:last-child { margin-bottom: 0; }
+.field label { font-size: .82rem; font-weight: 600; color: var(--muted); }
+
+.field select,
+.field input,
+.input-affix {
+  width: 100%;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-size: .95rem;
+  padding: 11px 12px;
+  outline: none;
+}
+.field select { appearance: none; cursor: pointer; }
+.field input:focus,
+.field select:focus,
+.input-affix:focus-within { border-color: var(--accent); }
+
+.input-affix { display: flex; align-items: center; gap: 6px; padding: 0 12px; }
+.input-affix .affix { color: var(--muted); font-size: .95rem; }
+.input-affix input { border: 0; background: transparent; padding: 11px 0; }
+
+/* --- Графика --- */
+.chart-card { min-height: 420px; }
+.chart { position: relative; padding-left: 26px; }
+.chart__yaxis-title {
+  position: absolute; left: -6px; top: 50%;
+  transform: rotate(-90deg) translateX(50%);
+  transform-origin: left center;
+  font-size: .72rem; color: var(--muted); letter-spacing: .5px;
+  white-space: nowrap;
+}
+.chart__rows { display: grid; gap: 14px; padding: 8px 0 6px; }
+.chart__row { display: grid; grid-template-columns: 18px 1fr; align-items: center; gap: 10px; }
+.chart__ylabel { font-size: .78rem; color: var(--muted); text-align: right; }
+.chart__track {
+  position: relative;
+  height: 26px;
+  background: rgba(255,255,255,.03);
+  border-radius: 6px;
+}
+.bar {
+  position: absolute; left: 0; top: 0; height: 100%;
+  border-radius: 0 6px 6px 0;
+  transition: width .35s ease;
+}
+.bar--prospects { background: var(--bar-prospects); z-index: 1; }
+.bar--leads     { background: var(--bar-leads);     z-index: 2; }
+.bar--customers { background: var(--bar-customers); z-index: 3; }
+.chart__row:hover .bar--prospects { filter: brightness(1.15); }
+
+.chart__xaxis {
+  display: flex; justify-content: space-between;
+  border-top: 1px solid var(--border);
+  padding-top: 8px; margin-top: 4px;
+  margin-left: 28px; /* подравняване с track-овете (18px етикет + 10px gap) */
+}
+.chart__xaxis span { font-size: .7rem; color: var(--muted); }
+.chart__empty { color: var(--muted); font-size: .9rem; text-align: center; padding: 40px 0; }
+
+/* --- Карти с резултати --- */
+.stat {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+}
+.stat__head { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.stat__icon { font-size: 1.1rem; }
+.stat__label { font-weight: 700; font-size: 1.02rem; }
+.stat__pct { margin-left: auto; color: var(--muted); font-size: .9rem; font-weight: 600; }
+.stat__value { font-size: 2.4rem; font-weight: 800; line-height: 1.1; margin: 4px 0 12px; }
+.stat__bar { height: 8px; background: var(--panel-2); border-radius: 99px; overflow: hidden; }
+.stat__fill { height: 100%; background: var(--muted); border-radius: 99px; transition: width .35s ease; }
+
+/* --- Плъзгачи --- */
+.sliders { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; }
+.slider__row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+.slider__row label { font-size: .85rem; font-weight: 600; color: var(--muted); }
+.slider__val { font-size: .9rem; font-weight: 700; color: var(--text); }
+
+input[type="range"] {
+  -webkit-appearance: none; appearance: none;
+  width: 100%; height: 6px; border-radius: 99px;
+  background: var(--panel-2); outline: none; cursor: pointer;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 20px; height: 20px; border-radius: 50%;
+  background: #fff; border: 3px solid var(--accent);
+  box-shadow: 0 2px 6px rgba(0,0,0,.4);
+}
+input[type="range"]::-moz-range-thumb {
+  width: 20px; height: 20px; border-radius: 50%;
+  background: #fff; border: 3px solid var(--accent); box-shadow: 0 2px 6px rgba(0,0,0,.4);
+}
+
+/* --- Tooltip --- */
+.tooltip {
+  position: fixed; z-index: 50;
+  background: #2b3a57; color: var(--text);
+  border: 1px solid var(--border); border-radius: 8px;
+  padding: 8px 10px; font-size: .78rem; line-height: 1.5;
+  pointer-events: none; box-shadow: 0 8px 24px rgba(0,0,0,.45);
+  max-width: 200px;
+}
+.tooltip strong { color: #fff; }
+
+/* --- Адаптивност --- */
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+    grid-template-areas: "inputs" "stats" "chart" "sliders";
+  }
+  .stats { grid-template-columns: 1fr 1fr 1fr; }
+}
+@media (max-width: 560px) {
+  body { padding: 14px; }
+  .stats { grid-template-columns: 1fr; }
+  .sliders { grid-template-columns: 1fr; }
+}
