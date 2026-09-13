@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LeadPredictor</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <svg class="brand__logo" viewBox="0 0 24 24" width="30" height="30" aria-hidden="true">
+          <path d="M3 4h18l-7 8v7l-4 2v-9L3 4z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+        </svg>
+        <span class="brand__name">Lead<span class="brand__muted">Predictor</span></span>
+      </div>
+    </header>
+
+    <main class="layout">
+      <!-- ЛЯВ ПАНЕЛ: входни данни -->
+      <aside class="panel inputs">
+        <div class="field">
+          <label for="language" data-i18n="language">Language</label>
+          <select id="language">
+            <option value="en">🇺🇸 English</option>
+            <option value="bg">🇧🇬 Български</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="currency" data-i18n="currency">Currency</label>
+          <select id="currency">
+            <option value="$" data-i18n="usd">$ US Dollar</option>
+            <option value="€" data-i18n="eur">€ Euro</option>
+            <option value="лв." data-i18n="bgn">лв. Лев</option>
+            <option value="£" data-i18n="gbp">£ Pound</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="startDate" data-i18n="campaignStart">Campaign Start</label>
+          <input type="date" id="startDate" value="2026-05-08">
+        </div>
+
+        <div class="field">
+          <label for="endDate" data-i18n="campaignEnd">Campaign End</label>
+          <input type="date" id="endDate" value="2026-11-04">
+        </div>
+
+        <div class="field">
+          <label for="revenue" data-i18n="totalRevenue">Total Revenue</label>
+          <div class="input-affix">
+            <span class="affix" data-currency>$</span>
+            <input type="number" id="revenue" min="0" step="any" value="10000">
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="avgOrder" data-i18n="avgOrder">Avg. Order Value</label>
+          <div class="input-affix">
+            <span class="affix" data-currency>$</span>
+            <input type="number" id="avgOrder" min="0" step="any" value="1000">
+          </div>
+        </div>
+      </aside>
+
+      <!-- ЦЕНТЪР: месечна графика -->
+      <section class="panel chart-card">
+        <div class="chart">
+          <span class="chart__yaxis-title" data-i18n="months">Months</span>
+          <div class="chart__rows" id="chartRows"></div>
+          <div class="chart__xaxis" id="chartXAxis"></div>
+        </div>
+        <p class="chart__empty" id="chartEmpty" hidden data-i18n="noData">Въведете валидни данни, за да видите прогнозата.</p>
+      </section>
+
+      <!-- ДЯСНО: карти с резултати -->
+      <section class="stats">
+        <article class="stat">
+          <header class="stat__head">
+            <span class="stat__icon">🗂️</span>
+            <span class="stat__label" data-i18n="prospects">Prospects</span>
+            <span class="stat__pct" id="prospectsPct">100%</span>
+          </header>
+          <div class="stat__value" id="prospectsVal">125</div>
+          <div class="stat__bar"><div class="stat__fill" id="prospectsFill" style="width:100%"></div></div>
+        </article>
+
+        <article class="stat">
+          <header class="stat__head">
+            <span class="stat__icon">👤</span>
+            <span class="stat__label" data-i18n="leads">Leads</span>
+            <span class="stat__pct" id="leadsPct">20%</span>
+          </header>
+          <div class="stat__value" id="leadsVal">25</div>
+          <div class="stat__bar"><div class="stat__fill" id="leadsFill" style="width:20%"></div></div>
+        </article>
+
+        <article class="stat">
+          <header class="stat__head">
+            <span class="stat__icon">🏆</span>
+            <span class="stat__label" data-i18n="customers">Customers</span>
+            <span class="stat__pct" id="customersPct">8%</span>
+          </header>
+          <div class="stat__value" id="customersVal">10</div>
+          <div class="stat__bar"><div class="stat__fill" id="customersFill" style="width:8%"></div></div>
+        </article>
+      </section>
+
+      <!-- ДОЛУ: плъзгачи за проценти -->
+      <section class="panel sliders">
+        <div class="slider">
+          <div class="slider__row">
+            <label for="leadRate" data-i18n="leadRate">Lead Response Rate</label>
+            <span class="slider__val" id="leadRateVal">40.00%</span>
+          </div>
+          <input type="range" id="leadRate" min="1" max="100" step="0.5" value="40">
+        </div>
+
+        <div class="slider">
+          <div class="slider__row">
+            <label for="prospectRate" data-i18n="prospectRate">Prospect Response Rate</label>
+            <span class="slider__val" id="prospectRateVal">20.00%</span>
+          </div>
+          <input type="range" id="prospectRate" min="1" max="100" step="0.5" value="20">
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="tooltip" id="tooltip" hidden></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
