@@ -25,8 +25,7 @@
 
 ## Публикуван адрес (Netlify)
 
-<!-- Заменете с реалния линк след деплой -->
-https://your-site-name.netlify.app
+https://exam-programing-fundamentals-with-ai.netlify.app/
 
 ## Структура
 
