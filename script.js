@@ -10,7 +10,7 @@
       months: "Months", prospects: "Prospects", leads: "Leads", customers: "Customers",
       leadRate: "Lead Response Rate", prospectRate: "Prospect Response Rate",
       people: "people", month: "Month", noData: "Enter valid data to see the forecast.",
-      usd: "$ US Dollar", eur: "€ Euro", bgn: "лв. Lev", gbp: "£ Pound"
+      usd: "$ US Dollar", eur: "€ Euro", bgn: "лв. Lev", gbp: "£ Pound", reset: "Reset"
     },
     bg: {
       language: "Език", currency: "Валута",
@@ -19,7 +19,7 @@
       months: "Месеци", prospects: "Контакти", leads: "Потенц. клиенти", customers: "Клиенти",
       leadRate: "Отговори от потенц. клиенти", prospectRate: "Отговори от контакти",
       people: "души", month: "Месец", noData: "Въведете валидни данни, за да видите прогнозата.",
-      usd: "$ Долар", eur: "€ Евро", bgn: "лв. Лев", gbp: "£ Паунд"
+      usd: "$ Долар", eur: "€ Евро", bgn: "лв. Лев", gbp: "£ Паунд", reset: "Нулиране"
     }
   };
 
@@ -34,7 +34,7 @@
     prospectsPct: $("prospectsPct"), leadsPct: $("leadsPct"), customersPct: $("customersPct"),
     prospectsFill: $("prospectsFill"), leadsFill: $("leadsFill"), customersFill: $("customersFill"),
     chartRows: $("chartRows"), chartXAxis: $("chartXAxis"), chartEmpty: $("chartEmpty"),
-    tooltip: $("tooltip")
+    tooltip: $("tooltip"), resetBtn: $("resetBtn")
   };
 
   var lang = "en";
@@ -177,10 +177,20 @@
     renderChart(r);
   }
 
+  // ---- Връщане към стойностите по подразбиране ----
+  function resetDefaults() {
+    els.revenue.value = "10000";
+    els.avgOrder.value = "1000";
+    els.leadRate.value = "40";
+    els.prospectRate.value = "20";
+    update();
+  }
+
   // ---- Слушатели ----
   ["revenue", "avgOrder", "leadRate", "prospectRate", "startDate", "endDate"].forEach(function (id) {
     els[id].addEventListener("input", update);
   });
+  els.resetBtn.addEventListener("click", resetDefaults);
   els.currency.addEventListener("change", function () { applyCurrency(); });
   els.language.addEventListener("change", function () { applyLanguage(); update(); });
 
