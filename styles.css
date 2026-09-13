@@ -183,16 +183,3 @@ input[type="range"]::-moz-range-thumb {
   .stats { grid-template-columns: 1fr; }
   .sliders { grid-template-columns: 1fr; }
 }
-
-/* Бутон за връщане към стойностите по подразбиране */
-.btn-reset {
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  background: var(--panel-2);
-  color: var(--text);
-  font: inherit;
-  cursor: pointer;
-}
-.btn-reset:hover { border-color: var(--accent); color: var(--accent); }
